@@ -30,11 +30,13 @@ export async function loadCommands(client: CustomClient): Promise<void> {
     }
   }
 
-  if (env.DISCORD_TOKEN && env.DISCORD_CLIENT_ID) {
+  const isPlaceholder = (val: string) => !val || val.includes('your_') || val.includes('seu_');
+
+  if (!isPlaceholder(env.DISCORD_TOKEN) && !isPlaceholder(env.DISCORD_CLIENT_ID)) {
     const rest = new REST({ version: '10' }).setToken(env.DISCORD_TOKEN);
     try {
       console.log(`[CommandHandler] Registering ${commandsData.length} slash commands...`);
-      if (env.DISCORD_GUILD_ID) {
+      if (env.DISCORD_GUILD_ID && !isPlaceholder(env.DISCORD_GUILD_ID)) {
         await rest.put(
           Routes.applicationGuildCommands(env.DISCORD_CLIENT_ID, env.DISCORD_GUILD_ID),
           { body: commandsData }
@@ -47,6 +49,8 @@ export async function loadCommands(client: CustomClient): Promise<void> {
     } catch (error) {
       console.error('[CommandHandler] Error registering slash commands:', error);
     }
+  } else {
+    console.warn('[CommandHandler Warning] Slash commands skipped registration because DISCORD_TOKEN or DISCORD_CLIENT_ID contains placeholders in .env.');
   }
 }
 

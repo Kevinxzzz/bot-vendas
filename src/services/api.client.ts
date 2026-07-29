@@ -1,3 +1,5 @@
+/*
+// Integração com API (comentado temporariamente)
 import axios from 'axios';
 import { env } from '../config/env.js';
 
@@ -16,3 +18,5 @@ apiClient.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+*/
+
