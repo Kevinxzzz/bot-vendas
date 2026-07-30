@@ -1,15 +1,17 @@
 import { SlashCommandBuilder } from 'discord.js';
 import type { Command } from '../../types/command.js';
-import { apiClient } from '../../services/api.client.js';
+// import { apiClient } from '../../services/api.client.js';
 
 const pingCommand: Command = {
   data: new SlashCommandBuilder()
     .setName('ping')
-    .setDescription('Verifica a latência do bot e a conexão com a API de Vendas'),
+    .setDescription('Verifica a latência do bot no Discord'),
   execute: async (interaction) => {
     const sent = await interaction.reply({ content: 'Verificando status...', fetchReply: true, ephemeral: true });
     const botPing = sent.createdTimestamp - interaction.createdTimestamp;
 
+    /*
+    // Integração com API (comentado temporariamente)
     let apiStatus = 'Offline/Erro';
     let apiMessage = '';
 
@@ -23,9 +25,10 @@ const pingCommand: Command = {
       apiStatus = 'Inacessível ❌';
       apiMessage = error.message;
     }
+    */
 
     await interaction.editReply({
-      content: `🏓 **Pong!**\n\n• **Latência do Bot:** ${botPing}ms\n• **WebSocket Discord:** ${interaction.client.ws.ping}ms\n• **Status da API:** ${apiStatus} (${apiMessage})`,
+      content: `🏓 **Pong!**\n\n• **Latência do Bot:** ${botPing}ms\n• **WebSocket Discord:** ${interaction.client.ws.ping}ms`,
     });
   },
 };
