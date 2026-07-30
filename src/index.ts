@@ -1,6 +1,7 @@
 import { CustomClient } from './client/CustomClient.js';
 import { loadEvents } from './handlers/eventHandler.js';
 import { loadCommands } from './handlers/commandHandler.js';
+import { loadComponents } from './handlers/componentHandler.js';
 import { env } from './config/env.js';
 
 async function bootstrap() {
@@ -9,6 +10,7 @@ async function bootstrap() {
 
   await loadEvents(client);
   await loadCommands(client);
+  await loadComponents(client);
 
   const isPlaceholder = (val: string) => !val || val.includes('your_') || val.includes('seu_');
 
