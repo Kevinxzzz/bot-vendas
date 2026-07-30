@@ -1,8 +1,8 @@
 import { ActivityType } from 'discord.js';
 import type { Event } from '../types/event.js';
 
-const readyEvent: Event<'ready'> = {
-  name: 'ready',
+const readyEvent: Event<'clientReady'> = {
+  name: 'clientReady',
   once: true,
   execute: (client) => {
     console.log(`[Bot Online] Logged in as ${client.user?.tag}!`);

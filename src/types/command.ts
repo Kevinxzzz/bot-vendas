@@ -21,3 +21,19 @@ export interface ComponentHandler {
     client: CustomClient
   ) => Promise<void>;
 }
+
+export interface SelectMenuHandler {
+  customId: string;
+  execute: (interaction: StringSelectMenuInteraction, client: CustomClient) => Promise<void>;
+}
+
+export interface ButtonHandler {
+  customId: string;
+  execute: (interaction: ButtonInteraction, client: CustomClient) => Promise<void>;
+}
+
+export interface ModalHandler {
+  customId: string;
+  execute: (interaction: ModalSubmitInteraction, client: CustomClient) => Promise<void>;
+}
+
