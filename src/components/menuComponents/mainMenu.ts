@@ -3,7 +3,9 @@ import {
     ActionRowBuilder,
     StringSelectMenuBuilder,
     StringSelectMenuOptionBuilder,
-    type Interaction
+    type Interaction,
+    ButtonBuilder,
+    ButtonStyle
 } from 'discord.js';
 
 export function createMainMenuComponent(interaction: Interaction) {
@@ -38,12 +40,19 @@ export function createMainMenuComponent(interaction: Interaction) {
                 .setEmoji('💵')
         );
 
-    const row = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(menu);
+    const closeButton = new ButtonBuilder()
+        .setCustomId('close-menu')
+        .setLabel('Fechar')
+        .setStyle(ButtonStyle.Danger);
+
+    const menuRow = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(menu);
+    const buttonRow = new ActionRowBuilder<ButtonBuilder>().addComponents(closeButton);
 
     return {
         embed,
-        row,
+        menuRow,
+        buttonRow,
         embeds: [embed],
-        components: [row]
+        components: [menuRow, buttonRow]
     };
 }

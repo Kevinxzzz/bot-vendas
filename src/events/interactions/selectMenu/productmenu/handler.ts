@@ -1,5 +1,4 @@
 import type { SelectMenuHandler } from '../../../../types/command.js';
-import { createMainMenuComponent } from '../../../../components/menuComponents/mainMenu.js';
 
 export const productsMenuHandler: SelectMenuHandler = {
     customId: 'products-menu',
@@ -7,12 +6,6 @@ export const productsMenuHandler: SelectMenuHandler = {
         const selectedValue = interaction.values[0];
 
         switch (selectedValue) {
-            case 'back_to_main': {
-                const { embeds, components } = createMainMenuComponent(interaction);
-                await interaction.update({ embeds, components });
-                break;
-            }
-
             case 'create_product': {
                 await interaction.reply({
                     content: '➕ Funcionalidade de criar produto selecionada.',

@@ -3,6 +3,8 @@ import {
     ActionRowBuilder,
     StringSelectMenuBuilder,
     StringSelectMenuOptionBuilder,
+    ButtonBuilder,
+    ButtonStyle,
     type Interaction
 } from 'discord.js';
 
@@ -19,7 +21,7 @@ export function createProductMenuComponent(interaction: Interaction) {
             ].join('\n')
         )
         .setThumbnail(avatarUrl)
-        .setColor('#3B82F6');
+        .setColor('#7C3AED');
 
     const menu = new StringSelectMenuBuilder()
         .setCustomId('products-menu')
@@ -32,24 +34,31 @@ export function createProductMenuComponent(interaction: Interaction) {
                 .setEmoji('➕'),
 
             new StringSelectMenuOptionBuilder()
-                .setLabel('Listar produtos')
+                .setLabel('Ver produtos')
                 .setDescription('Ver todos os produtos cadastrados')
                 .setValue('list_products')
-                .setEmoji('📋'),
-
-            new StringSelectMenuOptionBuilder()
-                .setLabel('Voltar ao menu principal')
-                .setDescription('Retornar ao painel administrativo')
-                .setValue('back_to_main')
-                .setEmoji('⬅️')
+                .setEmoji('📋')
         );
 
-    const row = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(menu);
+    const backButton = new ButtonBuilder()
+        .setCustomId('back-to-main-menu')
+        .setLabel('Voltar')
+        .setEmoji('⬅️')
+        .setStyle(ButtonStyle.Secondary);
+
+    const closeButton = new ButtonBuilder()
+        .setCustomId('close-menu')
+        .setLabel('Fechar')
+        .setStyle(ButtonStyle.Danger);
+
+    const menuRow = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(menu);
+    const buttonRow = new ActionRowBuilder<ButtonBuilder>().addComponents(backButton, closeButton);
 
     return {
         embed,
-        row,
+        menuRow,
+        buttonRow,
         embeds: [embed],
-        components: [row]
+        components: [menuRow, buttonRow]
     };
 }

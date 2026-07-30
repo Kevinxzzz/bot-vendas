@@ -14,16 +14,28 @@ export async function loadComponents(client: CustomClient): Promise<void> {
 
     for (const file of files) {
         if ((file.endsWith('.ts') || file.endsWith('.js')) && !file.endsWith('.d.ts')) {
-            // Ignore pure UI component files named component.ts
             if (path.basename(file) === 'component.ts') continue;
 
             const fileUrl = `file://${file}`;
             const module = await import(fileUrl);
-            const handler = module.default || module.handler || module.adminMenuHandler || module.productsMenuHandler;
+
+            // Find any exported object that has customId and execute
+            const exportedValues = Object.values(module);
+            const handler = exportedValues.find(
+                (item: any) => item && typeof item === 'object' && item.customId && typeof item.execute === 'function'
+            ) as any;
 
             if (handler && handler.customId && typeof handler.execute === 'function') {
-                client.selectMenus.set(handler.customId, handler as SelectMenuHandler);
-                console.log(`[ComponentHandler] Loaded SelectMenu handler for customId: ${handler.customId}`);
+                if (file.includes('/buttons/')) {
+                    client.buttons.set(handler.customId, handler as ButtonHandler);
+                    console.log(`[ComponentHandler] Loaded Button handler for customId: ${handler.customId}`);
+                } else if (file.includes('/modals/')) {
+                    client.modals.set(handler.customId, handler as ModalHandler);
+                    console.log(`[ComponentHandler] Loaded Modal handler for customId: ${handler.customId}`);
+                } else {
+                    client.selectMenus.set(handler.customId, handler as SelectMenuHandler);
+                    console.log(`[ComponentHandler] Loaded SelectMenu handler for customId: ${handler.customId}`);
+                }
             }
         }
     }
